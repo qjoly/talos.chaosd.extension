@@ -36,8 +36,8 @@ jobs:
           images: ghcr.io/qjoly/talos.chaosd.extension/app
           tags: |
             type=ref,event=tag
-            type=raw,value=main
-            type=raw,value=${{ env.APP_VERSION }}-${{ matrix.talos_version }}-${{ matrix.arch }},enable=true
+            type=raw,value=${{ env.APP_VERSION }}-${{ matrix.talos_version }}-${{ matrix.arch }}
+            type=raw,value=${{ matrix.talos_version }}-${{ matrix.arch }},enable=true
 
       - name: replace VERSION in ext manifest
         run: sed -i "s/VERSION/${{ env.APP_VERSION }}/g" chaosd/manifest.yaml
