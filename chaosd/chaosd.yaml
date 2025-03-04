@@ -10,6 +10,7 @@ container:
     readonlyPaths: []
     # In order to run chaosd we need to have write access to the filesystem
     writeableRootfs: true
+    writeableSysfs: true
   mounts:
     - source: /dev
       destination: /dev
