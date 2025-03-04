@@ -1,0 +1,9 @@
+version: v1alpha1
+metadata:
+  name: chaosd
+  version: "VERSION"
+  author: qjoly
+  description: chaosd is a chaos engineering tool controlled by ChaosMesh
+  compatibility:
+    talos:
+      version: ">= v1.8.0"

@@ -1,0 +1,31 @@
+name: chaosd
+container:
+  entrypoint: /chaosd
+  args:
+    - server
+  environment:
+    - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  security:
+    maskedPaths: []
+    readonlyPaths: []
+    # In order to run chaosd we need to have write access to the filesystem
+    writeableRootfs: true
+  mounts:
+    - source: /dev
+      destination: /dev
+      type: bind
+      options:
+        - rshared
+        - rbind
+        - rw
+    - source: /var/chaosd
+      destination: /var
+      type: bind
+      options:
+        - rshared
+        - rbind
+        - rw
+depends:
+  - network:
+      - addresses
+restart: always

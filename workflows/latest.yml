@@ -1,0 +1,79 @@
+name: Workflow for building and pushing the chaosd extension
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  APP_VERSION: v1.4.0
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        talos_version: [1.9.4, 1.9.3, 1.8.4]
+        arch: [amd64, arm64]
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to registry
+        uses: docker/login-action@v3
+        with:
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/qjoly/talos.chaosd.extension/app
+          tags: |
+            type=ref,event=tag
+            type=raw,value=main
+            type=raw,value=${{ env.APP_VERSION }}-${{ matrix.talos_version }}-${{ matrix.arch }},enable=true
+
+      - name: replace VERSION in ext manifest
+        run: sed -i "s/VERSION/${{ env.APP_VERSION }}/g" chaosd/manifest.yaml
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: chaosd
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+
+      - name: Create Installer
+        env:
+          IMAGE_EXT: ghcr.io/qjoly/talos.chaosd.extension/app:${{ env.APP_VERSION }}-${{ matrix.talos_version }}-${{ matrix.arch }}
+          ARCH: ${{ matrix.arch }}
+          PROFILE: installer
+        run: |
+          docker run --rm -t -v /dev:/dev --privileged -e GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} -v "$PWD/_out:/out" \
+            "ghcr.io/siderolabs/imager:${{ matrix.talos_version }}" --arch "${ARCH}" \
+            --system-extension-image ${IMAGE_EXT} "${PROFILE}"
+          docker load -i ./_out/installer-${ARCH}.tar
+          docker tag ghcr.io/siderolabs/installer:${{ matrix.talos_version }} ghcr.io/qjoly/talos.chaosd.extension/installer:${{ env.APP_VERSION }}-${{ matrix.talos_version }}-${{ matrix.arch }}
+          docker push ghcr.io/qjoly/talos.chaosd.extension/installer:${{ env.APP_VERSION }}-${{ matrix.talos_version }}-${{ matrix.arch }}
+
+      - name: Create ISO
+        env:
+          IMAGE_EXT: ghcr.io/qjoly/talos.chaosd.extension/app:${{ env.APP_VERSION }}-${{ matrix.talos_version }}-${{ matrix.arch }}
+          ARCH: ${{ matrix.arch }}
+          PROFILE: iso
+        run: |
+          docker run --rm -t -v /dev:/dev --privileged -e GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} -v "$PWD/_out:/out" \
+            "ghcr.io/siderolabs/imager:${{ matrix.talos_version }}" --arch "${ARCH}" \
+            --system-extension-image ${IMAGE_EXT} "${PROFILE}"
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.6.0
+        with:
+          name: "${{ matrix.talos_version }}-${{ matrix.arch }}.iso"
+          path: "_out/metal-${{ matrix.arch }}.iso"
