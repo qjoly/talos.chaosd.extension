@@ -73,7 +73,7 @@ jobs:
             --system-extension-image ${IMAGE_EXT} "${PROFILE}"
 
       - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v4.6.1
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: "${{ matrix.talos_version }}-${{ matrix.arch }}.iso"
           path: "_out/metal-${{ matrix.arch }}.iso"
