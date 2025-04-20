@@ -1,8 +1,8 @@
 name: chaosd
 depends:
   - network:
-    - addresses
-    - connectivity
+      - addresses
+      - connectivity
   - configuration: true
 container:
   entrypoint: /entrypoint
@@ -25,7 +25,4 @@ container:
       options:
         - bind
         - rw
-depends:
-  - network:
-      - addresses
 restart: always
