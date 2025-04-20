@@ -44,6 +44,7 @@ jobs:
 
       - name: Build and push
         uses: docker/build-push-action@v6
+        id: build
         with:
           context: chaosd
           push: true
@@ -59,7 +60,7 @@ jobs:
             "ghcr.io/siderolabs/imager:${{ matrix.talos_version }}" --arch "${ARCH}" \
             --system-extension-image ${IMAGE_EXT} "${PROFILE}"
           docker load -i ./_out/installer-${ARCH}.tar
-          docker tag ghcr.io/siderolabs/installer:${{ matrix.talos_version }} ghcr.io/qjoly/talos.chaosd.extension/installer:${{ matrix.talos_version }}-${{ matrix.arch }}
+          docker tag ghcr.io/siderolabs/installer:${{ matrix.talos_version }} ghcr.io/qjoly/talos.chaosd.extension/installer:${{ matrix.talos_version }}-${{ matrix.arch }}@sha256:${{ steps.build.outputs.digest }}
           docker push ghcr.io/qjoly/talos.chaosd.extension/installer:${{ matrix.talos_version }}-${{ matrix.arch }}
 
       - name: Create ISO
