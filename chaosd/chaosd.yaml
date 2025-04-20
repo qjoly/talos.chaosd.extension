@@ -8,10 +8,10 @@ container:
   entrypoint: /entrypoint
   environment:
     - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/var/lib/chaosd/bin
-  # security:
-  #   # In order to run chaosd we need to have write access to the filesystem
-  #   writeableRootfs: true
-  #   writeableSysfs: true
+  security:
+    # In order to run chaosd we need to have write access to the filesystem
+    writeableRootfs: false
+    writeableSysfs: true
   mounts:
     - source: /dev
       destination: /dev

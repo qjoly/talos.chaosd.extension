@@ -10,11 +10,11 @@ func main() {
 	sourcePath := "/chaosd"
 	destPath := "/var/lib/chaosd/chaosd"
 
-	err := os.MkdirAll("/var/lib/chaosd", 0755)
-	if err != nil {
-		fmt.Printf("Error while creating /var/lib/chaosd: %v\n", err)
-		os.Exit(1)
-	}
+	// err := os.MkdirAll("/var/lib/chaosd", 0755)
+	// if err != nil {
+	// 	fmt.Printf("Error while creating /var/lib/chaosd: %v\n", err)
+	// 	os.Exit(1)
+	// }
 
 	input, err := os.ReadFile(sourcePath)
 	if err != nil {
