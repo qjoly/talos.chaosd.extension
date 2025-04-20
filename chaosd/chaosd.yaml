@@ -1,8 +1,6 @@
 name: chaosd
 container:
-  entrypoint: /chaosd
-  args:
-    - server
+  entrypoint: /run.sh
   environment:
     - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/var/lib/chaosd/bin
   security:

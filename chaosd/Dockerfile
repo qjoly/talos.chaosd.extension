@@ -17,7 +17,7 @@ COPY --from=builder /lib /rootfs/usr/local/lib/containers/chaosd/lib
 COPY --from=builder /lib64 /rootfs/usr/local/lib/containers/chaosd/lib64
 COPY chaosd.yaml /rootfs/usr/local/etc/containers/chaosd.yaml
 COPY manifest.yaml /
-COPY src/run.sh /rootfs/usr/local/lib/containers/run.sh
+COPY --chmod=555 src/run.sh /rootfs/usr/local/lib/containers/chaosd/run.sh
 WORKDIR /rootfs/usr/local/lib/containers/chaosd/
 
 
