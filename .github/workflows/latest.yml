@@ -60,7 +60,7 @@ jobs:
             "ghcr.io/siderolabs/imager:${{ matrix.talos_version }}" --arch "${ARCH}" \
             --system-extension-image ${IMAGE_EXT} "${PROFILE}"
           docker load -i ./_out/installer-${ARCH}.tar
-          docker tag ghcr.io/siderolabs/installer:${{ matrix.talos_version }} ghcr.io/qjoly/talos.chaosd.extension/installer:${{ matrix.talos_version }}-${{ matrix.arch }}@sha256:${{ steps.build.outputs.digest }}
+          docker tag ghcr.io/siderolabs/installer:${{ matrix.talos_version }} ghcr.io/qjoly/talos.chaosd.extension/installer:${{ matrix.talos_version }}-${{ matrix.arch }}@${{ steps.build.outputs.digest }}
           docker push ghcr.io/qjoly/talos.chaosd.extension/installer:${{ matrix.talos_version }}-${{ matrix.arch }}
 
       - name: Create ISO
