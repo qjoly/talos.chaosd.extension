@@ -4,7 +4,7 @@ container:
   args:
     - server
   environment:
-    - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/var/lib/chaosd/bin
   security:
     maskedPaths: []
     readonlyPaths: []
@@ -16,15 +16,13 @@ container:
       destination: /dev
       type: bind
       options:
-        - rshared
-        - rbind
+        - bind
         - rw
-    - source: /var/chaosd
-      destination: /var
+    - source: /var/lib/chaosd
+      destination: /var/lib/chaosd
       type: bind
       options:
-        - rshared
-        - rbind
+        - bind
         - rw
 depends:
   - network:
