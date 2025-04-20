@@ -1,4 +1,9 @@
 name: chaosd
+depends:
+  - network:
+    - addresses
+    - connectivity
+  - configuration: true
 container:
   entrypoint: /entrypoint
   environment:
