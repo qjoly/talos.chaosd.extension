@@ -35,10 +35,11 @@ func main() {
 	}
 
 	// Lancer chaosd server
-	cmd := exec.Command(destPath, "server",
-		"--cert", "/etc/chaosd/certs/chaosd.crt",
-		"--key", "/etc/chaosd/certs/chaosd.key")
+	// cmd := exec.Command(destPath, "server",
+	// 	"--cert", "/etc/chaosd/certs/chaosd.crt",
+	// 	"--key", "/etc/chaosd/certs/chaosd.key")
 
+	cmd := exec.Command(destPath, "server")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
