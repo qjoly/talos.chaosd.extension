@@ -10,12 +10,6 @@ func main() {
 	sourcePath := "/chaosd"
 	destPath := "/var/lib/chaosd/chaosd"
 
-	// err := os.MkdirAll("/var/lib/chaosd", 0755)
-	// if err != nil {
-	// 	fmt.Printf("Error while creating /var/lib/chaosd: %v\n", err)
-	// 	os.Exit(1)
-	// }
-
 	input, err := os.ReadFile(sourcePath)
 	if err != nil {
 		fmt.Printf("Error while reading %s: %v\n", sourcePath, err)
@@ -28,18 +22,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	err = os.MkdirAll("/etc/chaosd/certs", 0755)
-	if err != nil {
-		fmt.Printf("Error while creating /etc/chaosd/certs: %v\n", err)
-		os.Exit(1)
+	var cmd *exec.Cmd
+	if os.Getenv("CHAOSD_CERT") != "" && os.Getenv("CHAOSD_KEY") != "" {
+		cmd = exec.Command(destPath, "server",
+			"--cert", os.Getenv("CHAOSD_CERT"),
+			"--key", os.Getenv("CHAOSD_KEY"))
+	} else {
+		cmd = exec.Command(destPath, "server")
 	}
 
-	// Lancer chaosd server
-	// cmd := exec.Command(destPath, "server",
-	// 	"--cert", "/etc/chaosd/certs/chaosd.crt",
-	// 	"--key", "/etc/chaosd/certs/chaosd.key")
-
-	cmd := exec.Command(destPath, "server")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
