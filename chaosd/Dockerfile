@@ -10,11 +10,14 @@ FROM scratch
 COPY --from=builder /chaosd/bin/chaosd /rootfs/usr/local/lib/containers/chaosd/chaosd
 COPY --from=builder /chaosd/bin/tools /rootfs/usr/local/lib/containers/chaosd/usr/bin
 COPY --from=builder /bin/dd /rootfs/usr/local/lib/containers/chaosd/bin/dd
+COPY --from=builder /bin/bash /rootfs/usr/local/lib/containers/chaosd/bin/bash
+COPY --from=builder /bin/mkdir /rootfs/usr/local/lib/containers/chaosd/bin/mkdir
+COPY --from=builder /bin/cp /rootfs/usr/local/lib/containers/chaosd/bin/cp
 COPY --from=builder /lib /rootfs/usr/local/lib/containers/chaosd/lib
 COPY --from=builder /lib64 /rootfs/usr/local/lib/containers/chaosd/lib64
 COPY chaosd.yaml /rootfs/usr/local/etc/containers/chaosd.yaml
 COPY manifest.yaml /
+COPY src/run.sh /rootfs/usr/local/lib/containers/run.sh
 WORKDIR /rootfs/usr/local/lib/containers/chaosd/
-
 
 
