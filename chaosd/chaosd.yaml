@@ -1,6 +1,6 @@
 name: chaosd
 container:
-  entrypoint: /run.sh
+  entrypoint: /entrypoint
   environment:
     - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/var/lib/chaosd/bin
   security:
