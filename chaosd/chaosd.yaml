@@ -3,7 +3,7 @@ depends:
   - network:
       - addresses
       - connectivity
-  - configuration: true
+#  - configuration: true
 container:
   entrypoint: /entrypoint
   environment:
